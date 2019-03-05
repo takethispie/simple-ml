@@ -1,2 +1,2 @@
 # simple-ml
-basique machine library
+Basic machine learning library for school.
