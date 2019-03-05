@@ -5,11 +5,13 @@ namespace simple_ml
     public class Perceptron
     {
         public float[] Weights { get; private set; }
+        public readonly float[] Inputs;
         public int[] Outputs;
 
-        public Perceptron(int minimumWeight = -1, int maximumWeight = 1)
+        public Perceptron(float[] inputs, int minimumWeight = -1, int maximumWeight = 1)
         {
-            RandomizeWeights(minimumWeight, maximumWeight);
+            Inputs = inputs;
+            RandomizeWeights(Inputs.Length, minimumWeight, maximumWeight);
         }
 
         /// <summary>
@@ -19,6 +21,8 @@ namespace simple_ml
         /// <returns></returns>
         public int Guess(float[] inputs)
         {
+            if (inputs.Length == 0 || Weights.Length == 0 || Weights == null) return 0; //TODO: Y réfléchir
+
             float sum = 0f;
 
             for (int i = 0; i < Weights.Length; i++)
@@ -41,8 +45,10 @@ namespace simple_ml
             return -1;
         }
 
-        private void RandomizeWeights(int minimum, int maximum)
+        private void RandomizeWeights(int size, int minimum, int maximum)
         {
+            if (Weights == null) Weights = new float[size];
+
             for (int i = 0; i < Weights.Length; i++)
             {
                 Weights[i] = new Random().Next(minimum, maximum);

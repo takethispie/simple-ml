@@ -1,4 +1,3 @@
-﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using simple_ml;
 
@@ -14,8 +13,8 @@ namespace simple_ml_tests
         {
             const int minimumWeight = -1;
             const int maximumWeight = 1;
-            var inputs = new[] {1.0f, 1.5f, 0.6f};
-            _perceptron = new Perceptron(minimumWeight, maximumWeight);
+            var inputs = new[] { 1.0f, 1.5f, 0.6f };
+            _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
 
             foreach (var weight in _perceptron.Weights)
             {
@@ -29,7 +28,7 @@ namespace simple_ml_tests
             const int minimumWeight = -1;
             const int maximumWeight = 1;
             var inputs = new[] { 1.0f, 1.5f, 0.6f };
-            _perceptron = new Perceptron(minimumWeight, maximumWeight);
+            _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
 
             int guess = _perceptron.Guess(inputs);
 
@@ -40,7 +39,7 @@ namespace simple_ml_tests
         public void OutputsShouldBeEmpty()
         {
             var inputs = new[] { 1.0f, 1.5f, 0.6f };
-            _perceptron = new Perceptron();
+            _perceptron = new Perceptron(inputs);
 
             Assert.IsNull(_perceptron.Outputs);
         }
