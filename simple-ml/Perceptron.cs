@@ -17,19 +17,16 @@ namespace simple_ml
             Threshold = threshold;
         }
 
+        //on prend les entrée et les multiplie par leur poid respectif pour mettre dans un nouveau array
+        //si la sum de toute le weighted input > que threshold (0,5) alors true sinon false
+        // => seuil de d'activation
         public bool Process(double[] inputs) => inputs.Zip(Weights, (v, weight) => v*weight).Sum() > Threshold ? true : false;
 
         public bool Learn(bool expectedResult, double[] inputs) {
-            //on prend les entrée et les multiplie par leur poid respectif pour mettre dans un nouveau array
-            //si la sum de toute le weighted input > que threshold (0,5) alors true sinon false
-            // => seuil de d'activation
             var res = Process(inputs);
             if(res == expectedResult) return res;
-
             double error = (expectedResult?1:0) - (res?1:0);
-            for (int i = 0; i < Weights.Length; i++) {
-                Weights[i] += LearningRate * error * inputs[i];
-            }
+            Weights = Weights.Zip(inputs, (weight, input) => weight + (LearningRate * error * input)).ToArray();
             return res;
         }
     }
