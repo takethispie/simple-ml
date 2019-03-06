@@ -25,6 +25,7 @@ namespace simple_ml
         {
             if (inputs.Length != Weights.Length)
                 throw new ArgumentException("nombre incorrecte d'inputs");
+            
     
             // calculate the perceptron output and use Threshold to return a boolean
             return inputs.Zip(Weights, (value, weight) => value * weight).Sum() > Threshold;
