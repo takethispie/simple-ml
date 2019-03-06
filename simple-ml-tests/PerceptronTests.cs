@@ -19,7 +19,7 @@ namespace simple_ml_tests
 
             var expectedOutput = new double[] {-1, 1, -1, 1};
             const double learningRate = 0.1;
-            const int nbEpochs = 5000;
+            const int nbEpochs = 1000;
             
             double[] weights = Perceptron.CreateModel(2);
             weights = Perceptron.TrainLinearClassification(weights, input, expectedOutput, learningRate, nbEpochs);
@@ -31,11 +31,6 @@ namespace simple_ml_tests
             Console.WriteLine(weights[0]);
             Console.WriteLine(weights[1]);
             Console.WriteLine(weights[2]);
-
-            //for (int i = 0; i < expectedOutput.Length; i++)
-            //{
-            //    Assert.AreEqual(expectedOutput[i], model[i]);
-            //}
         }
     }
 }

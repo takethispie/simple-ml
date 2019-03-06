@@ -32,7 +32,7 @@ namespace simple_ml
         {
             var total = model[0];
 
-            for (int i = 1; i < input.Length; i++)
+            for (int i = 1; i <= input.Length; i++)
             {
                 total += model[i] * input[i - 1];
             }
