@@ -4,9 +4,9 @@ namespace simple_ml
 {
     public class Perceptron
     {
-        public static double[] CreateModel(int inputsSize)
+        public static double[] CreateModel(int nbInputColumns)
         {
-            var weights = new double[inputsSize + 1];
+            var weights = new double[nbInputColumns + 1];
 
             for (int i = 0; i < weights.Length; i++)
             {
@@ -28,11 +28,11 @@ namespace simple_ml
             return -1;
         }
 
-        private static int ClassificationLinearInference(double[] model, double[] input)
+        public static int ClassificationLinearInference(double[] model, double[] input)
         {
             var total = model[0];
 
-            for (int i = 1; i <= input.Length; i++)
+            for (int i = 1; i < input.Length; i++)
             {
                 total += model[i] * input[i - 1];
             }
