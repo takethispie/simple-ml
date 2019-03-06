@@ -13,7 +13,7 @@ namespace simple_ml_tests
         {
             const int minimumWeight = -1;
             const int maximumWeight = 1;
-            var inputs = new[] { 1.0f, 1.5f, 0.6f };
+            var inputs = new[] { 1.0, 1.5, 0.6 };
             _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
 
             foreach (var weight in _perceptron.Weights)
@@ -27,7 +27,7 @@ namespace simple_ml_tests
         {
             const int minimumWeight = -1;
             const int maximumWeight = 1;
-            var inputs = new[] { 1.0f, 1.5f, 0.6f };
+            var inputs = new[] { 1.0, 1.5, 0.6 };
             _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
 
             int guess = _perceptron.Guess(inputs);
@@ -38,7 +38,7 @@ namespace simple_ml_tests
         [TestMethod]
         public void OutputsShouldBeEmpty()
         {
-            var inputs = new[] { 1.0f, 1.5f, 0.6f };
+            var inputs = new[] { 1.0, 1.5, 0.6 };
             _perceptron = new Perceptron(inputs);
 
             Assert.IsNull(_perceptron.Outputs);
