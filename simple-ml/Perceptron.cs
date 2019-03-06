@@ -4,30 +4,45 @@ using System.Linq;
 
 namespace simple_ml
 {
-    public class Perceptron
+    public class BinaryPerceptron
     {
-        public double[] Weights;
-        public double LearningRate, Threshold;
-
-        public Perceptron(int inputCount, double learningRate = 0.1, double threshold = 0.5) {
-            Weights = new double[inputCount+1];
+        public double LearningRate { set; get; }
+    
+    
+        public double[] Weights { set; get; }
+    
+    
+        public const double Threshold = 0.5;
+    
+    
+        public BinaryPerceptron(int inputCount, double learningRate = 0.1)
+        {
+            Weights = new double[inputCount];
             LearningRate = learningRate;
-            Threshold = threshold;
         }
-
-        //on prend les entrée et les multiplie par leur poid respectif pour mettre dans un nouveau array
-        //si la sum de toute le weighted input > que threshold (0,5) alors true sinon false
-        // => seuil de d'activation
-        public bool Process(double[] inputs) => inputs
-                                                    .Zip(Weights, (v, weight) => v*weight)
-                                                    .Sum() > Threshold;
-
-        public bool Learn(bool expectedResult, double[] inputs) {
-            var res = Process(inputs);
-            if(res == expectedResult) return res;
-            double error = (expectedResult?1:0) - (res?1:0);
-            Weights = Weights.Zip(inputs, (weight, input) => weight + LearningRate * error * input).ToArray();
-            return res;
+    
+        public bool Process(params double[] inputs)
+        {
+            if (inputs.Length != Weights.Length)
+                throw new ArgumentException("nombre incorrecte d'inputs");
+    
+            // calculate the perceptron output and use Threshold to return a boolean
+            return inputs.Zip(Weights, (value, weight) => value * weight).Sum() > Threshold;
         }
+    
+        
+        public bool Learn(bool expectedResult, params double[] inputs)
+        {
+            bool result = Process(inputs);
+            if (result == expectedResult) return result;
+            double error = (expectedResult?1:0) - (result?1:0);
+            for (int i = 0; i < Weights.Length; i++)
+            {
+                Weights[i] += LearningRate * error * inputs[i];
+            }
+    
+            return result;
+        }
+    
     }
 }
