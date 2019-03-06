@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using simple_ml;
 
@@ -6,42 +7,34 @@ namespace simple_ml_tests
     [TestClass]
     public class PerceptronTests
     {
-        private Perceptron _perceptron;
-
         [TestMethod]
-        public void WeightsShouldBeBetweenInclusiveNegativeOneAndInclusivePositiveOne()
+        public void ShouldOutputExpectedResults()
         {
-            const int minimumWeight = -1;
-            const int maximumWeight = 1;
-            var inputs = new[] { 1.0, 1.5, 0.6 };
-            _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
+            //var input = new[]
+            //{
+            //    new[] { 1, 0.5, 0.1 },
+            //    new[] { 1, 1.5, 0.9 },
+            //    new[] { 1, 1.1, 1.2 }
+            //};
 
-            foreach (var weight in _perceptron.Weights)
+            var input = new[]{
+                new[] {1, 0.3, 1.5},
+                new[] {1, 0.9, -2.5},
+                new[] {1, 0.1, 0.3},
+                new[] {1, -0.5, 1.2}
+            };
+
+            var expectedOutput = new double[] {1, -1, 1, -1};
+            const double learningRate = 1;
+            const int nbEpochs = 10000;
+            
+            double[] weights = Perceptron.CreateModel(input.Length);
+            double[] output = Perceptron.TrainLinearClassification(weights, input, expectedOutput, learningRate, nbEpochs);
+
+            for (int i = 0; i < expectedOutput.Length; i++)
             {
-                Assert.IsTrue(weight >= minimumWeight && weight <= maximumWeight);
+                Assert.AreEqual(expectedOutput[i], output[i]);
             }
-        }
-
-        [TestMethod]
-        public void GuessShouldBeEqualToNegativeOneOrPositiveOne()
-        {
-            const int minimumWeight = -1;
-            const int maximumWeight = 1;
-            var inputs = new[] { 1.0, 1.5, 0.6 };
-            _perceptron = new Perceptron(inputs, minimumWeight, maximumWeight);
-
-            int guess = _perceptron.Guess(inputs);
-
-            Assert.IsTrue(guess == minimumWeight || guess == maximumWeight);
-        }
-
-        [TestMethod]
-        public void OutputsShouldBeEmpty()
-        {
-            var inputs = new[] { 1.0, 1.5, 0.6 };
-            _perceptron = new Perceptron(inputs);
-
-            Assert.IsNull(_perceptron.Outputs);
         }
     }
 }

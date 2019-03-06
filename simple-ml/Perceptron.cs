@@ -1,37 +1,19 @@
 ﻿using System;
-using System.Linq;
 
 namespace simple_ml
 {
     public class Perceptron
     {
-        public double[] Weights { get; private set; }
-        public readonly double[] Inputs;
-        public int[] Outputs;
-
-        public Perceptron(double[] inputs, int minimumWeight = -1, int maximumWeight = 1)
+        public static double[] CreateModel(int inputsSize)
         {
-            Inputs = inputs;
-            RandomizeWeights(Inputs.Length, minimumWeight, maximumWeight);
-        }
+            var weights = new double[inputsSize + 1];
 
-        /// <summary>
-        /// Computes the sum of each input with its respective weight
-        /// </summary>
-        /// <param name="inputs"></param>
-        /// <returns></returns>
-        public int Guess(double[] inputs)
-        {
-            if (inputs.Length == 0 || Weights.Length == 0 || Weights == null) return 0; //TODO: Y réfléchir
-
-            double sum = 0f;
-
-            for (int i = 0; i < Weights.Length; i++)
+            for (int i = 0; i < weights.Length; i++)
             {
-                sum += inputs[i] * Weights[i];
+                weights[i] = new Random().NextDouble() * 2.0 - 1.0;
             }
 
-            return Activate(sum);
+            return weights;
         }
 
         /// <summary>
@@ -39,34 +21,63 @@ namespace simple_ml
         /// </summary>
         /// <param name="sum"></param>
         /// <returns></returns>
-        private static int Activate(double sum)
+        public static int Sign(double sum)
         {
             if (sum >= 0) return 1;
 
             return -1;
         }
 
-        private void RandomizeWeights(int size, int minimum, int maximum)
+        private static int ClassificationLinearInference(double[] model, double[] input)
         {
-            if (Weights == null) Weights = new double[size];
+            var total = model[0];
 
-            for (int i = 0; i < Weights.Length; i++)
+            for (int i = 1; i <= input.Length; i++)
             {
-                Weights[i] = new Random().Next(minimum, maximum);
+                total += model[i] * input[i - 1];
             }
+
+            return Sign(total);
         }
 
-        public int Learn(int expectedResult, double[] inputs)
+        private double RegressiveLinearInference(double[] model, double[] input)
         {
-            var guess = Guess(inputs);
+            var total = model[0];
 
-            if (guess == expectedResult) return guess;
+            for (int i = 1; i <= input.Length; i++)
+            {
+                total += model[i] * input[i - 1];
+            }
 
-            double error = (expectedResult == 1 ? 1 : -1) - (guess == 1 ? 1 : -1);
+            return total;
+        }
 
-            Weights = Weights.Zip(inputs, (weight, input) => weight + (LearningRate * error * input)).ToArray();
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="model">Tableau des poids</param>
+        /// <param name="inputs">Une dimension par paramètre tel que l'âge, le sexe, la taille, etc.</param>
+        /// <param name="expectedOutput"></param>
+        /// <param name="learningRate"></param>
+        /// <param name="nbEpochs">Nombre d'itérations</param>
+        public static double[] TrainLinearClassification(double[] model, double[][] inputs, double[] expectedOutput, double learningRate, int nbEpochs)
+        {
+            for (int i = 0; i < nbEpochs; i++)
+            {
+                for (int k = 0; k < inputs.Length; k++)
+                {
+                    var gxk = ClassificationLinearInference(model, inputs[k]);
 
-            return guess;
+                    var yk = expectedOutput[k];
+
+                    for (int w = 0; w <= inputs[k].Length; w++)
+                    {
+                        model[w] += learningRate * (yk - gxk) * (w == 0 ? 1.0 : inputs[k][w - 1]);
+                    }
+                }
+            }
+
+            return model;
         }
     }
 }
