@@ -17,16 +17,13 @@ namespace simple_ml
             });
         }
 
+        
         public void adjustWeight()
         {
             ForEach(perc =>
             {
-               perc.Connections.ForEach(child =>
-               {
-                   child.From.AdjustWeights(perc.Backpropagation(child.weight, perc.Error, perc.Derivative(4.0) );
-               }); 
+               perc.Connections.ForEach(child => child.From.AdjustWeights(child.From.Backpropagation(perc))); 
             });
-            //neuron.AdjustWeights(_output.ErrorFeedback(neuron));
         }
         
     }
