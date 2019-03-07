@@ -4,45 +4,58 @@ using System.Linq;
 
 namespace simple_ml
 {
-    public class BinaryPerceptron
+    public class Perceptron
     {
         public double LearningRate { set; get; }
+
+        public List<NeuronConnection> Connections { get; set; }
     
     
-        public double[] Weights { set; get; }
-    
-    
-        public const double Threshold = 0.5;
-    
-    
-        public BinaryPerceptron(int inputCount, double learningRate = 0.1)
+        private double Input;
+        private double outputSum;
+        private double bias;
+        public double Error { get; private set; }
+
+        public Perceptron(double learningRate = 0.1)
         {
-            Weights = new double[inputCount];
+            var rnd = new Random();
+            Connections = new List<NeuronConnection>();
             LearningRate = learningRate;
         }
-    
-        public bool Process(params double[] inputs)
+
+        public void Backpropagation(double weight, double outputNeuronError, double outputNeuronDerivative)
         {
-            if (inputs.Length != Weights.Length)
-                throw new ArgumentException("nombre incorrecte d'inputs");
-            
-    
-            // calculate the perceptron output and use Threshold to return a boolean
-            return inputs.Zip(Weights, (value, weight) => value * weight).Sum() > Threshold;
+            Error = weight * outputNeuronDerivative * outputNeuronError;
         }
     
-        
-        public bool Learn(bool expectedResult, params double[] inputs)
-        {
-            bool result = Process(inputs);
-            if (result == expectedResult) return result;
-            double error = (expectedResult?1:0) - (result?1:0);
-            for (int i = 0; i < Weights.Length; i++)
-            {
-                Weights[i] += LearningRate * error * inputs[i];
-            }
     
-            return result;
+        public double Derivative(double output)
+        {
+            double activation = output;
+            return activation * (1 - activation);
+        }
+        
+        
+        public double Sigmoid(double x) => 1 / (1 + Math.Exp(-x));
+        
+
+        public double Output() => outputSum != double.MinValue ? outputSum : Sigmoid(Input + bias);
+        
+         
+    
+        public double Activate(params double[] inputs)
+        {
+            if (inputs.Length != Connections.Count) throw new ArgumentException("nombre incorrecte d'inputs");
+            Input = inputs.Zip(Connections, (inp, con) => con.weight * inp).Sum();
+            //inpuntSum = inpuntSum + bias * Weights[Weights.Length - 1];
+            return Output();
+        }
+        
+
+        public void AdjustWeights(double value)
+        {
+            Error = value;
+            Connections.ForEach(con => con.weight += Error * Derivative(Output()) * LearningRate);
         }
     
     }
