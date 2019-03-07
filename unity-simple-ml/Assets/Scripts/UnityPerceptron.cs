@@ -92,7 +92,7 @@ namespace Assets.Scripts
             {
                 double[] coordinates = { sphere.position.x, sphere.position.z };
                 //float newCoordinates = SimpleLinearClassifier.ClassifierLinearInference(model, coordinates);
-                sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
+                //sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
             }
         }
     }
