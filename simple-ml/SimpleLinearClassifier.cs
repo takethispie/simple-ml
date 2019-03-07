@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace simple_ml
 {
-    public static class Perceptron
+    public static class SimpleLinearClassifier
     {
         /// <summary>
         /// Generates the model based on the number of columns in the input

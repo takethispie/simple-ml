@@ -6,7 +6,7 @@ using simple_ml;
 namespace simple_ml_tests
 {
     [TestClass]
-    public class PerceptronTests
+    public class SimpleLinearClassifierTests
     {
         [TestMethod]
         public void ShouldOutputExpectedClasses()
@@ -17,12 +17,12 @@ namespace simple_ml_tests
                 new[] {1.0, 1.0},
                 new[] {2.0, 2.0}
             };
-
+            
             var expectedOutput = new double[] {-1, 1, -1, -1};
             int expectedOutputLength = expectedOutput.Length;
             
-            var model = Perceptron.TrainLinearClassifier(input, expectedOutput);
-            var classes = Perceptron.GetInputClasses(model, input, expectedOutputLength);
+            var model = SimpleLinearClassifier.TrainLinearClassifier(input, expectedOutput);
+            var classes = SimpleLinearClassifier.GetInputClasses(model, input, expectedOutputLength);
 
             CollectionAssert.AreEqual(expectedOutput, classes);
         }
@@ -30,7 +30,7 @@ namespace simple_ml_tests
         [TestMethod]
         public void ShouldSignWithNegativeOne()
         {
-            double result = Perceptron.Sign(-59.0);
+            double result = SimpleLinearClassifier.Sign(-59.0);
 
             Assert.AreEqual(result, -1);
         }
@@ -38,7 +38,7 @@ namespace simple_ml_tests
         [TestMethod]
         public void ShouldSignZeroWithPositiveOne()
         {
-            double result = Perceptron.Sign(0.0);
+            double result = SimpleLinearClassifier.Sign(0.0);
 
             Assert.AreEqual(result, 1);
         }
@@ -46,7 +46,7 @@ namespace simple_ml_tests
         [TestMethod]
         public void ShouldSignWithPositiveOne()
         {
-            double result = Perceptron.Sign(16.0);
+            double result = SimpleLinearClassifier.Sign(16.0);
 
             Assert.AreEqual(result, 1);
         }
@@ -62,7 +62,7 @@ namespace simple_ml_tests
             };
 
             int nbInputColumns = input[0].Length;
-            var model = Perceptron.CreateModel(nbInputColumns);
+            var model = SimpleLinearClassifier.CreateModel(nbInputColumns);
 
             Assert.IsTrue(model.Length - 1 == nbInputColumns);
         }
@@ -78,7 +78,7 @@ namespace simple_ml_tests
             };
 
             int nbInputColumns = input[0].Length;
-            var model = Perceptron.CreateModel(nbInputColumns);
+            var model = SimpleLinearClassifier.CreateModel(nbInputColumns);
 
             CollectionAssert.AllItemsAreInstancesOfType(model, typeof(double));
         }
@@ -94,7 +94,7 @@ namespace simple_ml_tests
             };
 
             int nbInputColumns = input[0].Length;
-            var model = Perceptron.CreateModel(nbInputColumns);
+            var model = SimpleLinearClassifier.CreateModel(nbInputColumns);
 
             bool hasIncorrectValue = model.Any(x => x < -1.0 || x > 2.0);
 
@@ -112,7 +112,7 @@ namespace simple_ml_tests
             };
 
             int nbInputColumns = input[0].Length;
-            var model = Perceptron.CreateModel(nbInputColumns);
+            var model = SimpleLinearClassifier.CreateModel(nbInputColumns);
             model[0] = 2.1;
 
             bool hasIncorrectValue = model.Any(x => x < -1.0 || x > 2.0);
