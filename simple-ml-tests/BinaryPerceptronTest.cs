@@ -13,19 +13,18 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            var input = new NeuronLayer(2);
-            var hidden1 = new NeuronLayer(2);
-            var output = new NeuronLayer(1);
-            input.ConnectToNext(hidden1);
-            hidden1.ConnectToNext(output);
-            netw = new NeuronNetwork(input, hidden1, output);
+            netw = new NeuronNetwork();
         }
 
 
         [Test]
         public void AND()
         {
-            Console.WriteLine("TestRun");
+            netw.Train(new double[]{1,1}, 1);
+            netw.Train(new double[]{0,1}, 0);
+            netw.Train(new double[]{1,0}, 1);
+            netw.Train(new double[]{0,0}, 0);
+            Assert.AreEqual(netw.Activate(new double[]{1,1}), 1);
         }
     }
 }
