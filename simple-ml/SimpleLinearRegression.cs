@@ -36,9 +36,10 @@ namespace simple_ml
             }
         }
 
-        public void Compute()
+        public double[] Compute()
         {
             W = ((X.Transpose() * X).Inverse() * X.Transpose()) * Y;
+            return W.ToColumnMajorArray();
         }
     }
 }
