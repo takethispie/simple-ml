@@ -19,11 +19,10 @@ namespace simple_ml_tests
             };
 
             var expectedOutput = new double[] {-1, 1, -1, -1};
-            const double learningRate = 0.1;
-            const int nbEpochs = 1000;
+            int expectedOutputLength = expectedOutput.Length;
             
-            var model = Perceptron.TrainLinearClassifier(input, expectedOutput, learningRate, nbEpochs);
-            var classes = Perceptron.GetInputClasses(model, input, expectedOutput);
+            var model = Perceptron.TrainLinearClassifier(input, expectedOutput);
+            var classes = Perceptron.GetInputClasses(model, input, expectedOutputLength);
 
             CollectionAssert.AreEqual(expectedOutput, classes);
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace simple_ml
 {
@@ -28,22 +29,7 @@ namespace simple_ml
         /// <returns></returns>
         public static int Sign(double sum)
         {
-            if (sum >= 0) return 1;
-
-            return -1;
-        }
-
-        [Obsolete]
-        public static double RegressiveLinearInference(double[] model, double[] input)
-        {
-            var total = model[0];
-
-            for (int i = 1; i <= input.Length; i++)
-            {
-                total += model[i] * input[i - 1];
-            }
-
-            return total;
+            return sum >= 0 ? 1 : -1;
         }
 
         /// <summary>
@@ -69,11 +55,12 @@ namespace simple_ml
         /// </summary>
         /// <param name="inputs">One dimension per parameter like the age, the sex, the height, etc.</param>
         /// <param name="expectedOutput">Represents the expected class for each input</param>
+        /// <param name="model">Model to use in the training. Can be null and created on the fly.</param>
         /// <param name="learningRate">Learning rate of the machine</param>
         /// <param name="nbEpochs">Nombre d'itérations</param>
-        public static double[] TrainLinearClassifier(double[][] inputs, double[] expectedOutput, double learningRate = 0.1, int nbEpochs = 1000)
+        public static double[] TrainLinearClassifier(double[][] inputs, double[] expectedOutput, double[] model = null, double learningRate = 0.1, int nbEpochs = 1000)
         {
-            var model = CreateModel(inputs[0].Length);
+            if (model == null || !model.Any()) model = CreateModel(inputs[0].Length);
 
             for (int i = 0; i < nbEpochs; i++)
             {
@@ -98,11 +85,11 @@ namespace simple_ml
         /// </summary>
         /// <param name="model">Associated model</param>
         /// <param name="input">Associated input</param>
-        /// <param name="expectedOutput">Expected classes for each input</param>
+        /// <param name="expectedOutputLength">Count of expected classes for each input</param>
         /// <returns>Input's classes</returns>
-        public static double[] GetInputClasses(double[] model, double[][] input, double[] expectedOutput)
+        public static double[] GetInputClasses(double[] model, double[][] input, int expectedOutputLength)
         {
-            var classes = new double[expectedOutput.Length];
+            var classes = new double[expectedOutputLength];
 
             for (int i = 0; i < input.Length; i++)
             {
@@ -110,6 +97,23 @@ namespace simple_ml
             }
 
             return classes;
+        }
+
+        /// <summary>
+        /// Generates a random array with -1, 0 or 1 corresponding to an expected output
+        /// </summary>
+        /// <param name="inputLength">Count of the number of inputs</param>
+        /// <returns>The expectedOutput classes array</returns>
+        public static double[] GenerateRandomExpectedOutput(int inputLength)
+        {
+            var output = new double[inputLength];
+
+            for (int i = 0; i < output.Length; i++)
+            {
+                output[i] = new Random().Next(-1, 1);
+            }
+
+            return output;
         }
     }
 }
