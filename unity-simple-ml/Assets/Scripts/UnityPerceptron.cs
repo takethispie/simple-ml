@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public class UnityPerceptron : MonoBehaviour
     {
-        public int MethodToUse = 0;
+        public int MethodToUse;
 
         // Start is called before the first frame update
         void Start()
@@ -50,13 +50,13 @@ namespace Assets.Scripts
             }
             
             var model = SimpleLinearClassifier.CreateModel(input[0].Length);
-            var result = SimpleLinearClassifier.TrainLinearClassifier(input, expectedOutput, model);
+            var result = SimpleLinearClassifier.Train(input, expectedOutput, model);
             var whiteSpheres = GameObject.Find("White").transform;
 
             foreach (Transform sphere in whiteSpheres)
             {
                 double[] coordinates = { sphere.position.x, sphere.position.z };
-                float newCoordinates = SimpleLinearClassifier.ClassifierLinearInference(model, coordinates);
+                float newCoordinates = SimpleLinearClassifier.LinearInference(model, coordinates);
                 sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
             }
         }
@@ -84,15 +84,15 @@ namespace Assets.Scripts
             }
 
             var regression = new SimpleLinearRegression(input, expectedOutput);
-            var result = regression.Compute();
+            var model = regression.Compute();
 
             var whiteSpheres = GameObject.Find("White").transform;
 
             foreach (Transform sphere in whiteSpheres)
             {
                 double[] coordinates = { sphere.position.x, sphere.position.z };
-                //float newCoordinates = SimpleLinearClassifier.ClassifierLinearInference(model, coordinates);
-                //sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
+                float newCoordinates = regression.LinearInference(model, coordinates);
+                sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
             }
         }
     }

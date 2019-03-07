@@ -21,7 +21,7 @@ namespace simple_ml_tests
             var expectedOutput = new double[] {-1, 1, -1, -1};
             int expectedOutputLength = expectedOutput.Length;
             
-            var model = SimpleLinearClassifier.TrainLinearClassifier(input, expectedOutput);
+            var model = SimpleLinearClassifier.Train(input, expectedOutput);
             var classes = SimpleLinearClassifier.GetInputClasses(model, input, expectedOutputLength);
 
             CollectionAssert.AreEqual(expectedOutput, classes);

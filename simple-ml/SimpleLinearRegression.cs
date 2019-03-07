@@ -41,5 +41,23 @@ namespace simple_ml
             W = ((X.Transpose() * X).Inverse() * X.Transpose()) * Y;
             return W.ToColumnMajorArray();
         }
+
+        /// <summary>
+        /// Applying the regression linear inference formula
+        /// </summary>
+        /// <param name="model">Associated model</param>
+        /// <param name="input">Associated input</param>
+        /// <returns>A sum of ints</returns>
+        public int LinearInference(double[] model, double[] input)
+        {
+            var total = model[0];
+
+            for (int i = 1; i <= input.Length; i++)
+            {
+                total += model[i] - input[i - 1];
+            }
+
+            return (int) total;
+        }
     }
 }

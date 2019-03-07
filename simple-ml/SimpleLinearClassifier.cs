@@ -38,7 +38,7 @@ namespace simple_ml
         /// <param name="model">Associated model</param>
         /// <param name="input">Associated input</param>
         /// <returns>1 or -1 based on the Rosenblatt rule</returns>
-        public static int ClassifierLinearInference(double[] model, double[] input)
+        public static int LinearInference(double[] model, double[] input)
         {
             var total = model[0];
 
@@ -58,7 +58,7 @@ namespace simple_ml
         /// <param name="model">Model to use in the training. Can be null and created on the fly.</param>
         /// <param name="learningRate">Learning rate of the machine</param>
         /// <param name="nbEpochs">Nombre d'itérations</param>
-        public static double[] TrainLinearClassifier(double[][] inputs, double[] expectedOutput, double[] model = null, double learningRate = 0.1, int nbEpochs = 1000)
+        public static double[] Train(double[][] inputs, double[] expectedOutput, double[] model = null, double learningRate = 0.1, int nbEpochs = 1000)
         {
             if (model == null || !model.Any()) model = CreateModel(inputs[0].Length);
 
@@ -66,7 +66,7 @@ namespace simple_ml
             {
                 for (int k = 0; k < inputs.Length; k++)
                 {
-                    var gxk = ClassifierLinearInference(model, inputs[k]);
+                    var gxk = LinearInference(model, inputs[k]);
 
                     var yk = expectedOutput[k];
 
@@ -93,7 +93,7 @@ namespace simple_ml
 
             for (int i = 0; i < input.Length; i++)
             {
-                classes[i] = ClassifierLinearInference(model, input[i]);
+                classes[i] = LinearInference(model, input[i]);
             }
 
             return classes;

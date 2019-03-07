@@ -23,10 +23,13 @@ namespace simple_ml_tests
 
             var regression = new SimpleLinearRegression(input, expectedOutput);
             var result = regression.Compute();
+            int i = 0;
 
             foreach (double d in result)
             {
                 Console.WriteLine(d);
+                Console.WriteLine(regression.LinearInference(result, input[i]));
+                i++;
             }
         }
     }
