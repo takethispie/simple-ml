@@ -13,10 +13,11 @@ namespace simple_ml
         public static double[] CreateModel(int nbInputColumns)
         {
             var model = new double[nbInputColumns + 1];
+            var rdm = new Random();
 
             for (int i = 0; i < model.Length; i++)
             {
-                model[i] = new Random().NextDouble() * 2.0 - 1.0;
+                model[i] = rdm.NextDouble() * 2.0 - 1.0;
             }
 
             return model;
