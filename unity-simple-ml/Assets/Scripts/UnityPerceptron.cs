@@ -18,6 +18,9 @@ namespace Assets.Scripts
                 case 1:
                     LinearRegression();
                     break;
+                case 2:
+                    NonLinearClassifier();
+                    break;
             }
         }
 
@@ -45,7 +48,6 @@ namespace Assets.Scripts
                 if (sphere.position.y >= 0) expectedOutput[redSpheresCount] = 1;
                 else expectedOutput[redSpheresCount] = -1;
 
-                //Debug.Log($"X: {spherePosition.x} | Y: {spherePosition.y} | Z: {spherePosition.z}");
                 redSpheresCount++;
             }
             
@@ -56,7 +58,7 @@ namespace Assets.Scripts
             foreach (Transform sphere in whiteSpheres)
             {
                 double[] coordinates = { sphere.position.x, sphere.position.z };
-                float newCoordinates = SimpleLinearClassifier.LinearInference(model, coordinates);
+                float newCoordinates = SimpleLinearClassifier.LinearInference(result, coordinates);
                 sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
             }
         }
@@ -76,10 +78,8 @@ namespace Assets.Scripts
 
                 input[redSpheresCount] = new[] { x, z };
 
-                if (sphere.position.y >= 0) expectedOutput[redSpheresCount] = 1;
-                else expectedOutput[redSpheresCount] = -1;
-
-                //Debug.Log($"X: {spherePosition.x} | Y: {spherePosition.y} | Z: {spherePosition.z}");
+                expectedOutput[redSpheresCount] = sphere.position.y;
+                
                 redSpheresCount++;
             }
 
@@ -91,7 +91,41 @@ namespace Assets.Scripts
             foreach (Transform sphere in whiteSpheres)
             {
                 double[] coordinates = { sphere.position.x, sphere.position.z };
-                float newCoordinates = regression.LinearInference(model, coordinates);
+                float newCoordinates = (float) regression.LinearInference(model, coordinates);
+                sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
+            }
+        }
+
+        private static void NonLinearClassifier()
+        {
+            var redSpheres = GameObject.Find("Red").transform;
+            var input = new double[redSpheres.childCount][];
+            var expectedOutput = new double[input.Length];
+            int redSpheresCount = 0;
+
+            foreach (Transform sphere in redSpheres)
+            {
+                var spherePosition = sphere.position;
+                double x = Mathf.Pow(spherePosition.x, 2);
+                double z = Mathf.Pow(spherePosition.z, 2);
+
+                input[redSpheresCount] = new[] { x, z };
+
+                if (sphere.position.y >= 0) expectedOutput[redSpheresCount] = 1;
+                else expectedOutput[redSpheresCount] = -1;
+
+                Debug.Log($"X: {spherePosition.x} | Y: {spherePosition.y} | Z: {spherePosition.z}");
+                redSpheresCount++;
+            }
+
+            var model = SimpleLinearClassifier.CreateModel(input[0].Length);
+            var result = SimpleLinearClassifier.Train(input, expectedOutput, model);
+            var whiteSpheres = GameObject.Find("White").transform;
+
+            foreach (Transform sphere in whiteSpheres)
+            {
+                double[] coordinates = { sphere.position.x, sphere.position.z };
+                float newCoordinates = SimpleLinearClassifier.LinearInference(model, coordinates);
                 sphere.position = new Vector3(sphere.position.x, newCoordinates, sphere.position.z);
             }
         }

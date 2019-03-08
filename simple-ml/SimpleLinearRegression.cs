@@ -39,7 +39,7 @@ namespace simple_ml
         public double[] Compute()
         {
             W = ((X.Transpose() * X).Inverse() * X.Transpose()) * Y;
-            return W.ToColumnMajorArray();
+            return W.ToRowMajorArray();
         }
 
         /// <summary>
@@ -48,16 +48,16 @@ namespace simple_ml
         /// <param name="model">Associated model</param>
         /// <param name="input">Associated input</param>
         /// <returns>A sum of ints</returns>
-        public int LinearInference(double[] model, double[] input)
+        public double LinearInference(double[] model, double[] input)
         {
             var total = model[0];
 
             for (int i = 1; i <= input.Length; i++)
             {
-                total += model[i] - input[i - 1];
+                total += model[i] * input[i - 1];
             }
 
-            return (int) total;
+            return total;
         }
     }
 }

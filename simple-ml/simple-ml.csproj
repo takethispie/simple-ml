@@ -11,7 +11,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutputPath>C:\Users\Olivier\source\repos\simple-ml\unity-simple-ml\Assets\</OutputPath>
+    <OutputPath>C:\Users\Travail\source\repos\simple-ml\unity-simple-ml\Assets\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <Content Include="SimpleLinearClassifier.cs" />
